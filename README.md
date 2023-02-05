@@ -21,3 +21,6 @@
 ## 🐣 Challenges
 
 - [x]  화면 방향이 변경될 때, 값 유지하기
+
+## 💡 Learn
+[숫자세기 앱](https://zest-cucumber-44b.notion.site/f50a08c7fe7b4a57969322d115ea181f)

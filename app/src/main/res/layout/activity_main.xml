@@ -8,19 +8,19 @@
 
     <EditText
         android:id="@+id/inputEditText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="end"
         android:hint="자연수를 입력해주세요"
         android:textSize="20sp"
         android:textColor="@color/black"
         android:inputType="numberDecimal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintVertical_bias="0.4"
-        app:layout_constraintHorizontal_bias="0.3"/>
+        app:layout_constraintHorizontal_bias="0.0"/>
 
     <TextView
         android:id="@+id/outputTextView"
@@ -65,5 +65,19 @@
         app:layout_constraintStart_toEndOf="@id/inputUnitTextView"
         app:layout_constraintTop_toTopOf="@id/inputUnitTextView"
         app:layout_constraintBottom_toBottomOf="@id/outputUnitTextView"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/startGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.15"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/endGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.65"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

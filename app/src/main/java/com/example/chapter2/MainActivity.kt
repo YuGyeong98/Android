@@ -23,4 +23,15 @@ class MainActivity : AppCompatActivity() {
             binding.numberTextView.text = number.toString()
         }
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putInt("number", number)
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        number = savedInstanceState.getInt("number")
+        binding.numberTextView.text = number.toString()
+        super.onRestoreInstanceState(savedInstanceState)
+    }
 }

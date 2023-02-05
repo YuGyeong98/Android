@@ -1,13 +1,15 @@
 package com.example.unit_converter
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import com.example.unit_converter.databinding.ActivityMainBinding
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    var inputNumber = 0
+    var inputNumber = BigDecimal("0")
     var cmToM = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,12 +24,13 @@ class MainActivity : AppCompatActivity() {
         val swapImageButton = binding.swapImageButton
 
         inputEditText.addTextChangedListener { text ->
-            inputNumber = if (text.isNullOrEmpty()) 0 else text.toString().toInt()
+            inputNumber =
+                if (text.isNullOrEmpty()) BigDecimal("0") else text.toString().toBigDecimal()
 
             if (cmToM) {
-                outputTextView.text = inputNumber.times(0.01).toString()
+                outputTextView.text = conversion("0.01")
             } else {
-                outputTextView.text = inputNumber.times(100).toString()
+                outputTextView.text = conversion("100")
             }
         }
 
@@ -36,12 +39,22 @@ class MainActivity : AppCompatActivity() {
             if (cmToM) {
                 inputUnitTextView.text = "cm"
                 outputUnitTextView.text = "m"
-                outputTextView.text = inputNumber.times(0.01).toString()
+                outputTextView.text = conversion("0.01")
             } else {
                 inputUnitTextView.text = "m"
                 outputUnitTextView.text = "cm"
-                outputTextView.text = inputNumber.times(100).toString()
+                outputTextView.text = conversion("100")
             }
+        }
+    }
+
+    private fun conversion(value: String): String {
+        inputNumber = inputNumber.times(BigDecimal(value))
+
+        return if (inputNumber.scale() < 6) {
+            inputNumber.toString()
+        } else {
+            inputNumber.setScale(6, RoundingMode.HALF_EVEN).toString()
         }
     }
 }

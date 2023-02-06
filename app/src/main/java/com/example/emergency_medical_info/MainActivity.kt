@@ -3,6 +3,7 @@ package com.example.emergency_medical_info
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.core.view.isVisible
 import com.example.emergency_medical_info.databinding.ActivityMainBinding
 
@@ -17,6 +18,10 @@ class MainActivity : AppCompatActivity() {
         binding.editButton.setOnClickListener {
             val intent = Intent(this, EditActivity::class.java)
             startActivity(intent)
+        }
+
+        binding.deleteButton.setOnClickListener {
+            deleteData()
         }
     }
 
@@ -42,5 +47,14 @@ class MainActivity : AppCompatActivity() {
                 binding.precautionsValueTextView.text = precautions
             }
         }
+    }
+
+    private fun deleteData() {
+        with(getSharedPreferences(USER_INFORMATION, MODE_PRIVATE).edit()) {
+            clear()
+            apply()
+            getDataUiUpdate()
+        }
+        Toast.makeText(this, "초기화 완료", Toast.LENGTH_SHORT).show()
     }
 }

@@ -142,4 +142,11 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.4"/>
 
+    <androidx.constraintlayout.helper.widget.Layer
+        android:id="@+id/emergencyContactLayer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="emergencyContactValueTextView, emergencyContactImageView"
+        tools:ignore="MissingConstraints"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 package com.example.emergency_medical_info
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -22,6 +23,15 @@ class MainActivity : AppCompatActivity() {
 
         binding.deleteButton.setOnClickListener {
             deleteData()
+        }
+
+        binding.emergencyContactLayer.setOnClickListener {
+            with(Intent(Intent.ACTION_DIAL)) {
+                val phoneNumber =
+                    binding.emergencyContactValueTextView.text.toString().replace("-", "")
+                data = Uri.parse("tel:$phoneNumber")
+                startActivity(this)
+            }
         }
     }
 

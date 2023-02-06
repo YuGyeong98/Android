@@ -48,6 +48,7 @@ class EditActivity : AppCompatActivity() {
             putString(BLOOD_TYPE, getBloodType())
             putString(EMERGENCY_CONTACT, binding.emergencyContactEditText.text.toString())
             putString(PRECAUTIONS, getPrecautions())
+            apply()
         }
         Toast.makeText(this, "저장 완료", Toast.LENGTH_SHORT).show()
     }

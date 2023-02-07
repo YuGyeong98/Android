@@ -29,9 +29,9 @@
 
 ## 🐣 Challenges
 
-- [ ] spinner - 텍스트가 다음 줄로 넘어가는 현상
-- [ ] DatePickerDialog - 오늘 날짜로 초기화 하기
-- [ ] 비상 연락처 입력받을 때 '-' 자동으로 넣기(정규식)
+- [x] spinner - 텍스트가 다음 줄로 넘어가는 현상
+- [x] DatePickerDialog - 오늘 날짜로 초기화 하기
+- [x] 비상 연락처 입력받을 때 '-' 자동으로 넣기
 
 ## 💡 Learn
 [응급 의료정보 앱](https://zest-cucumber-44b.notion.site/d958b59d29fe4c2f8275545392f7ee41)

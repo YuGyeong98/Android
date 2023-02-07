@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.view.isVisible
 import com.example.emergency_medical_info.databinding.ActivityEditBinding
+import java.util.Calendar
 
 class EditActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEditBinding
@@ -22,7 +23,14 @@ class EditActivity : AppCompatActivity() {
             val listener = OnDateSetListener { _, year, month, dayOfMonth ->
                 binding.birthdayValueTextView.text = "$year-${month.inc()}-$dayOfMonth"
             }
-            DatePickerDialog(this, listener, 2023, 1, 6).show()
+            val calendar = Calendar.getInstance()
+            DatePickerDialog(
+                this,
+                listener,
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            ).show()
         }
 
         binding.bloodTypeSpinner.adapter = ArrayAdapter.createFromResource(

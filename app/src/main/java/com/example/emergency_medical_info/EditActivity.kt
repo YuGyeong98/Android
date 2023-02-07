@@ -36,7 +36,7 @@ class EditActivity : AppCompatActivity() {
         binding.bloodTypeSpinner.adapter = ArrayAdapter.createFromResource(
             this,
             R.array.blood_types,
-            android.R.layout.simple_list_item_1
+            android.R.layout.simple_dropdown_item_1line
         )
 
         binding.emergencyContactEditText.addTextChangedListener(PhoneNumberFormattingTextWatcher())

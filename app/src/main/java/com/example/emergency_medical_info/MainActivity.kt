@@ -48,12 +48,10 @@ class MainActivity : AppCompatActivity() {
             binding.emergencyContactValueTextView.text = getString(EMERGENCY_CONTACT, "미정")
 
             val precautions = getString(PRECAUTIONS, "")
-            if (precautions.isNullOrEmpty()) {
-                binding.precautionsTextView.isVisible = false
-                binding.precautionsValueTextView.isVisible = false
-            } else {
-                binding.precautionsTextView.isVisible = true
-                binding.precautionsValueTextView.isVisible = true
+            binding.precautionsTextView.isVisible = !precautions.isNullOrEmpty()
+            binding.precautionsValueTextView.isVisible = !precautions.isNullOrEmpty()
+
+            if (!precautions.isNullOrEmpty()) {
                 binding.precautionsValueTextView.text = precautions
             }
         }

@@ -124,7 +124,7 @@
     <Button
         android:id="@+id/buttonClear"
         style="@style/operatorKeypad"
-        android:onClick="operatorClicked"
+        android:onClick="clearClicked"
         android:text="C"
         tools:ignore="MissingConstraints" />
 

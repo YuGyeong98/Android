@@ -49,6 +49,15 @@ class MainActivity : AppCompatActivity() {
         updateEquationTextView()
     }
 
+    fun clearClicked(view: View) {
+        firstNumberText.clear()
+        operatorText.clear()
+        secondNumberText.clear()
+
+        updateEquationTextView()
+        binding.resultTextView.text = ""
+    }
+
     private fun updateEquationTextView() {
         val firstFormattedNumber = if (firstNumberText.isNotEmpty()) decimalFormat.format(
             firstNumberText.toString().toBigDecimal()

@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.telephony.PhoneNumberFormattingTextWatcher
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -29,6 +30,8 @@ class EditActivity : AppCompatActivity() {
             R.array.blood_types,
             android.R.layout.simple_list_item_1
         )
+
+        binding.emergencyContactEditText.addTextChangedListener(PhoneNumberFormattingTextWatcher())
 
         binding.precautionsCheckBox.setOnCheckedChangeListener { _, isChecked ->
             binding.precautionsEditText.isVisible = isChecked

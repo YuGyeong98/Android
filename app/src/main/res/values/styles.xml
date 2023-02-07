@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="numberKeypad">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:textSize">40sp</item>
+        <item name="backgroundTint">#D8B8FF</item>
+    </style>
+
+    <style name="operatorKeypad" parent="numberKeypad">
+        <item name="backgroundTint">#71C0FF</item>
+    </style>
+
+    <style name="equalKeypad" parent="numberKeypad">
+        <item name="backgroundTint">#FF91B6</item>
+    </style>
+</resources>

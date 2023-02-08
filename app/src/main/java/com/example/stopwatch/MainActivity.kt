@@ -82,10 +82,23 @@ class MainActivity : AppCompatActivity() {
         timer?.cancel()
     }
 
+    private fun stop() {
+        binding.startButton.isVisible = true
+        binding.stopButton.isVisible = true
+        binding.pauseButton.isVisible = false
+        binding.lapButton.isVisible = false
+
+        binding.timeTextView.text = "00:00"
+        binding.tickTextView.text = "0"
+        binding.countdownGroup.isVisible = true
+    }
+
     private fun showAlertDialog() {
         AlertDialog.Builder(this).apply {
             setMessage("종료하시겠습니까?")
-            setPositiveButton("네", null)
+            setPositiveButton("네") { _, _ ->
+                stop()
+            }
             setNegativeButton("아니요", null)
         }.show()
     }

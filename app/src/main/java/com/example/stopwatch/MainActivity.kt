@@ -3,12 +3,17 @@ package com.example.stopwatch
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import com.example.stopwatch.databinding.ActivityMainBinding
 import com.example.stopwatch.databinding.DialogCountdownSettingBinding
+import java.util.*
+import kotlin.concurrent.timer
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var countdownSecond = 10
+    private var currentDeciSecond = 0
+    private var timer: Timer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,6 +22,14 @@ class MainActivity : AppCompatActivity() {
 
         binding.countdownTextView.setOnClickListener {
             showCountdownSettingDialog()
+        }
+
+        binding.startButton.setOnClickListener {
+            start()
+            binding.startButton.isVisible = false
+            binding.stopButton.isVisible = false
+            binding.pauseButton.isVisible = true
+            binding.lapButton.isVisible = true
         }
 
         binding.stopButton.setOnClickListener {
@@ -40,6 +53,20 @@ class MainActivity : AppCompatActivity() {
             }
             setNegativeButton("취소", null)
         }.show()
+    }
+
+    private fun start() {
+        timer = timer(period = 100) { // worker 스레드
+            currentDeciSecond += 1 // 0.1초마다 증가
+            val minutes = (currentDeciSecond / 10) / 60 // 1초를 60으로 나누기
+            val seconds = (currentDeciSecond / 10) % 60
+            val deciSeconds = currentDeciSecond % 10
+
+            runOnUiThread {
+                binding.timeTextView.text = String.format("%02d:%02d", minutes, seconds)
+                binding.tickTextView.text = deciSeconds.toString()
+            }
+        }
     }
 
     private fun showAlertDialog() {

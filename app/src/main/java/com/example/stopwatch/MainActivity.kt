@@ -12,6 +12,7 @@ import kotlin.concurrent.timer
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var countdownSecond = 10
+    private var currentCountdownDeciSecond = countdownSecond * 10
     private var currentDeciSecond = 0
     private var timer: Timer? = null
 
@@ -64,6 +65,7 @@ class MainActivity : AppCompatActivity() {
             setView(dialogBinding.root)
             setPositiveButton("확인") { _, _ ->
                 countdownSecond = dialogBinding.countdownSecondPicker.value
+                currentCountdownDeciSecond = countdownSecond * 10
                 binding.countdownTextView.text = String.format("%02d", countdownSecond)
             }
             setNegativeButton("취소", null)
@@ -72,15 +74,26 @@ class MainActivity : AppCompatActivity() {
 
     private fun start() {
         timer = timer(period = 100) { // worker 스레드
-            currentDeciSecond += 1 // 0.1초마다 증가
-            val minutes = (currentDeciSecond / 10) / 60 // 1초를 60으로 나누기
-            val seconds = (currentDeciSecond / 10) % 60
-            val deciSeconds = currentDeciSecond % 10
+            if (currentCountdownDeciSecond == 0) {
+                currentDeciSecond += 1 // 0.1초마다 증가
+                val minutes = (currentDeciSecond / 10) / 60 // 1초를 60으로 나누기
+                val seconds = (currentDeciSecond / 10) % 60
+                val deciSeconds = currentDeciSecond % 10
 
-            runOnUiThread {
-                binding.timeTextView.text = String.format("%02d:%02d", minutes, seconds)
-                binding.tickTextView.text = deciSeconds.toString()
-                binding.countdownGroup.isVisible = false
+                runOnUiThread { // ui 스레드
+                    binding.timeTextView.text = String.format("%02d:%02d", minutes, seconds)
+                    binding.tickTextView.text = deciSeconds.toString()
+                    binding.countdownGroup.isVisible = false
+                }
+            } else {
+                currentCountdownDeciSecond -= 1 // 0.1초마다 감소
+                val seconds = currentCountdownDeciSecond / 10
+                val progress = (currentCountdownDeciSecond / (countdownSecond * 10f)) * 100
+
+                binding.root.post { // ui 스레드
+                    binding.countdownTextView.text = String.format("%02d", seconds)
+                    binding.countdownProgressBar.progress = progress.toInt()
+                }
             }
         }
     }

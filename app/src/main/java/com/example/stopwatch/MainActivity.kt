@@ -32,6 +32,14 @@ class MainActivity : AppCompatActivity() {
             binding.lapButton.isVisible = true
         }
 
+        binding.pauseButton.setOnClickListener {
+            pause()
+            binding.startButton.isVisible = true
+            binding.stopButton.isVisible = true
+            binding.pauseButton.isVisible = false
+            binding.lapButton.isVisible = false
+        }
+
         binding.stopButton.setOnClickListener {
             showAlertDialog()
         }
@@ -65,8 +73,13 @@ class MainActivity : AppCompatActivity() {
             runOnUiThread {
                 binding.timeTextView.text = String.format("%02d:%02d", minutes, seconds)
                 binding.tickTextView.text = deciSeconds.toString()
+                binding.countdownGroup.isVisible = false
             }
         }
+    }
+
+    private fun pause() {
+        timer?.cancel()
     }
 
     private fun showAlertDialog() {

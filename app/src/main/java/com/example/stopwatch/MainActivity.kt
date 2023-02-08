@@ -20,6 +20,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initCountdownView()
+
         binding.countdownTextView.setOnClickListener {
             showCountdownSettingDialog()
         }
@@ -43,6 +45,11 @@ class MainActivity : AppCompatActivity() {
         binding.stopButton.setOnClickListener {
             showAlertDialog()
         }
+    }
+
+    private fun initCountdownView() {
+        binding.countdownTextView.text = String.format("%02d", countdownSecond)
+        binding.countdownProgressBar.progress = 100
     }
 
     private fun showCountdownSettingDialog() {
@@ -88,9 +95,12 @@ class MainActivity : AppCompatActivity() {
         binding.pauseButton.isVisible = false
         binding.lapButton.isVisible = false
 
+        currentDeciSecond = 0
         binding.timeTextView.text = "00:00"
         binding.tickTextView.text = "0"
+
         binding.countdownGroup.isVisible = true
+        initCountdownView()
     }
 
     private fun showAlertDialog() {

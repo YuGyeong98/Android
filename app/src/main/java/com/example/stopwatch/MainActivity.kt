@@ -8,6 +8,7 @@ import com.example.stopwatch.databinding.DialogCountdownSettingBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private var countdownSecond = 10
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,10 +30,14 @@ class MainActivity : AppCompatActivity() {
             with(dialogBinding.countdownSecondPicker) {
                 maxValue = 20
                 minValue = 0
+                value = countdownSecond
             }
             setTitle("카운트다운 설정")
             setView(dialogBinding.root)
-            setPositiveButton("확인", null)
+            setPositiveButton("확인") { _, _ ->
+                countdownSecond = dialogBinding.countdownSecondPicker.value
+                binding.countdownTextView.text = String.format("%02d", countdownSecond)
+            }
             setNegativeButton("취소", null)
         }.show()
     }

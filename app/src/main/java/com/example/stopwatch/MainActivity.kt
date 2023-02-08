@@ -17,6 +17,10 @@ class MainActivity : AppCompatActivity() {
         binding.countdownTextView.setOnClickListener {
             showCountdownSettingDialog()
         }
+
+        binding.stopButton.setOnClickListener {
+            showAlertDialog()
+        }
     }
 
     private fun showCountdownSettingDialog() {
@@ -30,6 +34,14 @@ class MainActivity : AppCompatActivity() {
             setView(dialogBinding.root)
             setPositiveButton("확인", null)
             setNegativeButton("취소", null)
+        }.show()
+    }
+
+    private fun showAlertDialog() {
+        AlertDialog.Builder(this).apply {
+            setMessage("종료하시겠습니까?")
+            setPositiveButton("네", null)
+            setNegativeButton("아니요", null)
         }.show()
     }
 }

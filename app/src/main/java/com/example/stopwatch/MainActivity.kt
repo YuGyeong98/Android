@@ -2,8 +2,11 @@ package com.example.stopwatch
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Gravity
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
+import androidx.core.view.setPadding
 import com.example.stopwatch.databinding.ActivityMainBinding
 import com.example.stopwatch.databinding.DialogCountdownSettingBinding
 import java.util.*
@@ -41,6 +44,10 @@ class MainActivity : AppCompatActivity() {
             binding.stopButton.isVisible = true
             binding.pauseButton.isVisible = false
             binding.lapButton.isVisible = false
+        }
+
+        binding.lapButton.setOnClickListener {
+            lap()
         }
 
         binding.stopButton.setOnClickListener {
@@ -102,6 +109,26 @@ class MainActivity : AppCompatActivity() {
         timer?.cancel()
     }
 
+    private fun lap() {
+        if (currentDeciSecond == 0) return
+
+        val container = binding.lapContainerLinearLayout
+        TextView(this).apply {
+            textSize = 20f
+            gravity = Gravity.CENTER
+            val minutes = (currentDeciSecond / 10) / 60
+            val seconds = (currentDeciSecond / 10) % 60
+            val deciSeconds = currentDeciSecond % 10
+            text = "${container.childCount.inc()}. " + String.format(
+                "%02d:%02d:%01d",
+                minutes,
+                seconds,
+                deciSeconds
+            )
+            setPadding(30)
+        }.let { container.addView(it, 0) }
+    }
+
     private fun stop() {
         binding.startButton.isVisible = true
         binding.stopButton.isVisible = true
@@ -114,6 +141,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.countdownGroup.isVisible = true
         initCountdownView()
+        binding.lapContainerLinearLayout.removeAllViews()
     }
 
     private fun showAlertDialog() {

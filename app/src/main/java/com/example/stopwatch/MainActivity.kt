@@ -1,5 +1,7 @@
 package com.example.stopwatch
 
+import android.media.AudioManager
+import android.media.ToneGenerator
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Gravity
@@ -101,6 +103,14 @@ class MainActivity : AppCompatActivity() {
                     binding.countdownTextView.text = String.format("%02d", seconds)
                     binding.countdownProgressBar.progress = progress.toInt()
                 }
+            }
+            if (currentCountdownDeciSecond < 31 && currentCountdownDeciSecond % 10 == 0 && currentDeciSecond == 0) {
+                val toneType =
+                    if (currentCountdownDeciSecond == 0) ToneGenerator.TONE_CDMA_HIGH_L else ToneGenerator.TONE_CDMA_ANSWER
+                ToneGenerator(AudioManager.STREAM_ALARM, ToneGenerator.MAX_VOLUME).startTone(
+                    toneType,
+                    100
+                ).apply { releaseInstance() }
             }
         }
     }

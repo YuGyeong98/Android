@@ -146,6 +146,7 @@ class MainActivity : AppCompatActivity() {
         binding.lapButton.isVisible = false
 
         currentDeciSecond = 0
+        currentCountdownDeciSecond = countdownSecond * 10
         binding.timeTextView.text = "00:00"
         binding.tickTextView.text = "0"
 

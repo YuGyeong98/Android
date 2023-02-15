@@ -2,6 +2,7 @@ package com.example.vocabulary
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,6 +11,13 @@ import com.example.vocabulary.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity(), WordAdapter.ItemClickListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var wordAdapter: WordAdapter
+    private val updateAddWordResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val addWord = result.data?.getBooleanExtra("addWord", false) ?: false
+            if (result.resultCode == RESULT_OK && addWord) {
+                updateAddWord()
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,7 +28,7 @@ class MainActivity : AppCompatActivity(), WordAdapter.ItemClickListener {
 
         binding.goToAddActivity.setOnClickListener {
             val intent = Intent(this, AddActivity::class.java)
-            startActivity(intent)
+            updateAddWordResult.launch(intent)
         }
     }
 
@@ -41,6 +49,16 @@ class MainActivity : AppCompatActivity(), WordAdapter.ItemClickListener {
             }
         }.start()
     }
+
+    private fun updateAddWord() {
+        Thread {
+            AppDatabase.getInstance(this)?.wordDao()?.getLatestWord()?.let {
+                wordAdapter.list.add(0, it)
+                runOnUiThread {
+                    wordAdapter.notifyDataSetChanged()
+                }
+            }
+        }.start()
     }
 
     override fun onClick(word: Word) {

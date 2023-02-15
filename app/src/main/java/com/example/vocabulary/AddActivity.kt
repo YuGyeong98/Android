@@ -1,5 +1,6 @@
 package com.example.vocabulary
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -47,7 +48,15 @@ class AddActivity : AppCompatActivity() {
             runOnUiThread {
                 Toast.makeText(this, "저장을 완료했습니다.", Toast.LENGTH_SHORT).show()
             }
-            finish()
+            notifyAddWord()
         }.start()
+    }
+
+    private fun notifyAddWord() {
+        Intent(this, MainActivity::class.java).apply {
+            putExtra("addWord", true)
+            setResult(RESULT_OK, this)
+        }
+        finish()
     }
 }

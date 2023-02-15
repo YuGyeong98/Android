@@ -2,6 +2,7 @@ package com.example.vocabulary
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -11,6 +12,7 @@ import com.example.vocabulary.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity(), WordAdapter.ItemClickListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var wordAdapter: WordAdapter
+    private var selectedWord: Word? = null
     private val updateAddWordResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             val addWord = result.data?.getBooleanExtra("addWord", false) ?: false
@@ -29,6 +31,10 @@ class MainActivity : AppCompatActivity(), WordAdapter.ItemClickListener {
         binding.goToAddActivity.setOnClickListener {
             val intent = Intent(this, AddActivity::class.java)
             updateAddWordResult.launch(intent)
+        }
+
+        binding.deleteButton.setOnClickListener {
+            delete()
         }
     }
 
@@ -61,7 +67,23 @@ class MainActivity : AppCompatActivity(), WordAdapter.ItemClickListener {
         }.start()
     }
 
+    private fun delete() {
+        Thread {
+            selectedWord?.let {
+                AppDatabase.getInstance(this)?.wordDao()?.delete(it)
+                wordAdapter.list.remove(it)
+                runOnUiThread {
+                    wordAdapter.notifyDataSetChanged()
+                    binding.wordTextView.text = ""
+                    binding.meanTextView.text = ""
+                    Toast.makeText(this, "삭제가 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }.start()
+    }
+
     override fun onClick(word: Word) {
+        selectedWord = word
         binding.wordTextView.text = word.word
         binding.meanTextView.text = word.mean
     }

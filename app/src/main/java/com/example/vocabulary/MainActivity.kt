@@ -1,5 +1,6 @@
 package com.example.vocabulary
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -16,6 +17,11 @@ class MainActivity : AppCompatActivity(), WordAdapter.ItemClickListener {
         setContentView(binding.root)
 
         initRecyclerView()
+
+        binding.goToAddActivity.setOnClickListener {
+            val intent = Intent(this, AddActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun initRecyclerView() {

@@ -1,7 +1,8 @@
 package com.example.vocabulary
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.vocabulary.databinding.ActivityAddBinding
 import com.google.android.material.chip.Chip
 
@@ -14,6 +15,10 @@ class AddActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initViews()
+
+        binding.addButton.setOnClickListener {
+            add()
+        }
     }
 
     private fun initViews() {
@@ -30,4 +35,19 @@ class AddActivity : AppCompatActivity() {
             text = type
             isCheckable = true
         }
+
+    private fun add() {
+        val word = binding.wordTextInputEditText.text.toString()
+        val mean = binding.meanTextInputEditText.text.toString()
+        val type = findViewById<Chip>(binding.typeChipGroup.checkedChipId).text.toString()
+        val wordPair = Word(word, mean, type)
+
+        Thread {
+            AppDatabase.getInstance(this)?.wordDao()?.insert(wordPair)
+            runOnUiThread {
+                Toast.makeText(this, "저장을 완료했습니다.", Toast.LENGTH_SHORT).show()
+            }
+            finish()
+        }.start()
+    }
 }

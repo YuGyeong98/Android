@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.vocabulary.databinding.ItemWordBinding
 
 class WordAdapter(
-    private val list: MutableList<Word>,
+    val list: MutableList<Word>,
     private val itemClickListener: ItemClickListener
 ) : RecyclerView.Adapter<WordAdapter.WordViewHolder>() {
 

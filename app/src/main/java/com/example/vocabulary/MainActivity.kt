@@ -25,13 +25,22 @@ class MainActivity : AppCompatActivity(), WordAdapter.ItemClickListener {
     }
 
     private fun initRecyclerView() {
-        wordAdapter = WordAdapter(mutableListOf(Word("apple", "사과", "명사"), Word("banana", "바나나", "명사")), this)
+        wordAdapter = WordAdapter(mutableListOf(), this)
         binding.wordRecyclerView.apply {
             adapter = wordAdapter
             layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
             val divider = DividerItemDecoration(applicationContext, LinearLayoutManager.VERTICAL)
             addItemDecoration(divider)
         }
+
+        Thread {
+            val list = AppDatabase.getInstance(this)?.wordDao()?.getAll() ?: emptyList()
+            wordAdapter.list.addAll(list)
+            runOnUiThread {
+                wordAdapter.notifyDataSetChanged()
+            }
+        }.start()
+    }
     }
 
     override fun onClick(word: Word) {

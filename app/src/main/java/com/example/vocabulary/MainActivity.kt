@@ -1,6 +1,7 @@
 package com.example.vocabulary
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -18,6 +19,17 @@ class MainActivity : AppCompatActivity(), WordAdapter.ItemClickListener {
             val addWord = result.data?.getBooleanExtra("addWord", false) ?: false
             if (result.resultCode == RESULT_OK && addWord) {
                 updateAddWord()
+            }
+        }
+    private val updateEditWordResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val editWord = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                result.data?.getParcelableExtra("editWord", Word::class.java)
+            } else {
+                result.data?.getParcelableExtra("editWord")
+            }
+            if (result.resultCode == RESULT_OK && editWord != null) {
+                updateEditWord(editWord)
             }
         }
 
@@ -39,7 +51,7 @@ class MainActivity : AppCompatActivity(), WordAdapter.ItemClickListener {
 
         binding.editButton.setOnClickListener {
             val intent = Intent(this, AddActivity::class.java).putExtra("originWord", selectedWord)
-            startActivity(intent)
+            updateEditWordResult.launch(intent)
         }
     }
 
@@ -68,6 +80,19 @@ class MainActivity : AppCompatActivity(), WordAdapter.ItemClickListener {
                 runOnUiThread {
                     wordAdapter.notifyDataSetChanged()
                 }
+            }
+        }.start()
+    }
+
+    private fun updateEditWord(word: Word) {
+        val index = wordAdapter.list.indexOfFirst { it.id == word.id }
+        Thread {
+            wordAdapter.list[index] = word
+            selectedWord = word
+            runOnUiThread {
+                wordAdapter.notifyItemChanged(index)
+                binding.wordTextView.text = word.word
+                binding.meanTextView.text = word.mean
             }
         }.start()
     }

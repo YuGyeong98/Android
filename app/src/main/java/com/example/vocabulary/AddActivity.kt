@@ -21,7 +21,7 @@ class AddActivity : AppCompatActivity() {
         initViews()
 
         binding.addButton.setOnClickListener {
-            add()
+            if (originWord == null) add() else edit()
         }
     }
 
@@ -67,9 +67,34 @@ class AddActivity : AppCompatActivity() {
         }.start()
     }
 
+    private fun edit() {
+        val word = binding.wordTextInputEditText.text.toString()
+        val mean = binding.meanTextInputEditText.text.toString()
+        val type = findViewById<Chip>(binding.typeChipGroup.checkedChipId).text.toString()
+        val wordPair = originWord?.copy(word = word, mean = mean, type = type)
+
+        Thread {
+            wordPair?.let {
+                AppDatabase.getInstance(this)?.wordDao()?.update(it)
+                runOnUiThread {
+                    Toast.makeText(this, "수정을 완료했습니다.", Toast.LENGTH_SHORT).show()
+                }
+                notifyEditWord(it)
+            }
+        }.start()
+    }
+
     private fun notifyAddWord() {
         Intent(this, MainActivity::class.java).apply {
             putExtra("addWord", true)
+            setResult(RESULT_OK, this)
+        }
+        finish()
+    }
+
+    private fun notifyEditWord(word: Word) {
+        Intent(this, MainActivity::class.java).apply {
+            putExtra("editWord", word)
             setResult(RESULT_OK, this)
         }
         finish()

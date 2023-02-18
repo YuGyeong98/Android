@@ -36,6 +36,11 @@ class MainActivity : AppCompatActivity(), WordAdapter.ItemClickListener {
         binding.deleteButton.setOnClickListener {
             delete()
         }
+
+        binding.editButton.setOnClickListener {
+            val intent = Intent(this, AddActivity::class.java).putExtra("originWord", selectedWord)
+            startActivity(intent)
+        }
     }
 
     private fun initRecyclerView() {

@@ -21,7 +21,11 @@ class AddActivity : AppCompatActivity() {
         initViews()
 
         binding.addButton.setOnClickListener {
-            if (originWord == null) add() else edit()
+            if (checkWord()) {
+                if (originWord == null) add() else edit()
+            } else {
+                Toast.makeText(this, "모두 입력해주세요.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -98,5 +102,11 @@ class AddActivity : AppCompatActivity() {
             setResult(RESULT_OK, this)
         }
         finish()
+    }
+
+    private fun checkWord(): Boolean {
+        return !(binding.wordTextInputEditText.text.isNullOrEmpty() ||
+                binding.meanTextInputEditText.text.isNullOrEmpty() ||
+                findViewById<Chip>(binding.typeChipGroup.checkedChipId).text.isNullOrEmpty())
     }
 }

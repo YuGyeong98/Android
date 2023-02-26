@@ -3,6 +3,7 @@ package com.example.image_album
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import com.example.image_album.databinding.ActivityFrameBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -29,5 +30,17 @@ class FrameActivity : AppCompatActivity() {
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             binding.viewPager.currentItem = tab.position
         }.attach()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.example.image_album
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
@@ -26,11 +27,15 @@ class MainActivity : AppCompatActivity(), ImageAdapter.ItemClickListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initRecyclerView()
+
         binding.loadImageButton.setOnClickListener {
             checkPermission()
         }
 
-        initRecyclerView()
+        binding.navigateFrameActivityButton.setOnClickListener {
+            navigateToFrameActivity()
+        }
     }
 
     private fun initRecyclerView() {
@@ -87,6 +92,14 @@ class MainActivity : AppCompatActivity(), ImageAdapter.ItemClickListener {
         val images = uriList.map { ImageItems.Image(it) }
         val updatedImages = imageAdapter.currentList.toMutableList().apply { addAll(images) }
         imageAdapter.submitList(updatedImages)
+    }
+
+    private fun navigateToFrameActivity() {
+        val images = imageAdapter.currentList.filterIsInstance<ImageItems.Image>().map {
+            it.uri.toString()
+        }.toTypedArray()
+        val intent = Intent(this, FrameActivity::class.java).putExtra("images", images)
+        startActivity(intent)
     }
 
     override fun onRequestPermissionsResult(

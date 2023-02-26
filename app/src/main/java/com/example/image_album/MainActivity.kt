@@ -6,6 +6,8 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -33,10 +35,6 @@ class MainActivity : AppCompatActivity(), ImageAdapter.ItemClickListener {
         }
 
         initRecyclerView()
-
-        binding.loadImageButton.setOnClickListener {
-            checkPermission()
-        }
 
         binding.navigateFrameActivityButton.setOnClickListener {
             navigateToFrameActivity()
@@ -129,6 +127,23 @@ class MainActivity : AppCompatActivity(), ImageAdapter.ItemClickListener {
 
     override fun onLoadMoreClick() {
         checkPermission()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_add -> {
+                checkPermission()
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
     }
 
     companion object {

@@ -5,16 +5,17 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.image_album.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var imageAdapter: ImageAdapter
     private val imageLoadLauncher =
         registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uriList ->
             updateImage(uriList)
@@ -27,6 +28,16 @@ class MainActivity : AppCompatActivity() {
 
         binding.loadImageButton.setOnClickListener {
             checkPermission()
+        }
+
+        initRecyclerView()
+    }
+
+    private fun initRecyclerView() {
+        imageAdapter = ImageAdapter()
+        binding.imageRecyclerView.apply {
+            adapter = imageAdapter
+            layoutManager = GridLayoutManager(context, 2)
         }
     }
 
@@ -73,7 +84,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateImage(uriList: List<Uri>) {
-        Log.i("updateImage", "$uriList")
+        val images = uriList.map { ImageItems.Image(it) }
+        val updatedImages = imageAdapter.currentList.toMutableList().apply { addAll(images) }
+        imageAdapter.submitList(updatedImages)
     }
 
     override fun onRequestPermissionsResult(

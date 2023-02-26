@@ -27,6 +27,11 @@ class MainActivity : AppCompatActivity(), ImageAdapter.ItemClickListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.toolbar.apply {
+            title = "이미지 가져오기"
+            setSupportActionBar(this)
+        }
+
         initRecyclerView()
 
         binding.loadImageButton.setOnClickListener {

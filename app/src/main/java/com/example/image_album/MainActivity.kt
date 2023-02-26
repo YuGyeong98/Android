@@ -76,6 +76,26 @@ class MainActivity : AppCompatActivity() {
         Log.i("updateImage", "$uriList")
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            REQUEST_READ_MEDIA_IMAGES -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    loadImage()
+                } else {
+                    AlertDialog.Builder(this).apply {
+                        setMessage("이미지 읽기 권한 거부로 이미지를 가져올 수 없습니다.")
+                        setPositiveButton("확인", null)
+                    }.show()
+                }
+            }
+        }
+    }
+
     companion object {
         const val REQUEST_READ_MEDIA_IMAGES = 100
     }

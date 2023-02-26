@@ -13,7 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.image_album.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ImageAdapter.ItemClickListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var imageAdapter: ImageAdapter
     private val imageLoadLauncher =
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initRecyclerView() {
-        imageAdapter = ImageAdapter()
+        imageAdapter = ImageAdapter(this)
         binding.imageRecyclerView.apply {
             adapter = imageAdapter
             layoutManager = GridLayoutManager(context, 2)
@@ -107,6 +107,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onLoadMoreClick() {
+        checkPermission()
     }
 
     companion object {

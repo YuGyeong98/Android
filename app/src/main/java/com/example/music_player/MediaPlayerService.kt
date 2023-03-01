@@ -35,4 +35,11 @@ class MediaPlayerService : Service() {
         }
         return super.onStartCommand(intent, flags, startId)
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
+    }
 }

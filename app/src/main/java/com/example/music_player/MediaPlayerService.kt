@@ -24,6 +24,9 @@ class MediaPlayerService : Service() {
                 mediaPlayer?.start()
             }
             STOP -> {
+                mediaPlayer?.stop()
+                mediaPlayer?.release()
+                mediaPlayer = null
             }
         }
         return super.onStartCommand(intent, flags, startId)

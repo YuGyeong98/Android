@@ -5,3 +5,4 @@ const val CHANNEL_NAME = "MEDIA_PLAYER"
 const val PAUSE = "pause"
 const val PLAY = "play"
 const val STOP = "stop"
+const val NOTIFICATION_ID = 100

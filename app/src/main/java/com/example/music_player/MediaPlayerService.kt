@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.media.MediaPlayer
 import android.os.IBinder
 import android.os.PowerManager
@@ -13,6 +14,7 @@ import androidx.core.app.NotificationCompat
 
 class MediaPlayerService : Service() {
     private var mediaPlayer: MediaPlayer? = null
+    private val receiver = LowBatteryReceiver()
 
     override fun onCreate() {
         super.onCreate()
@@ -75,6 +77,11 @@ class MediaPlayerService : Service() {
         notificationManager.createNotificationChannel(channel)
     }
 
+    private fun initBroadcastReceiver() {
+        val filter = IntentFilter(Intent.ACTION_BATTERY_LOW)
+        registerReceiver(receiver, filter)
+    }
+
     override fun onBind(intent: Intent): IBinder {
         TODO("Return the communication channel to the service.")
     }
@@ -92,6 +99,7 @@ class MediaPlayerService : Service() {
                     start()
                     setWakeMode(applicationContext, PowerManager.PARTIAL_WAKE_LOCK)
                 }
+                initBroadcastReceiver()
             }
             STOP -> {
                 mediaPlayer?.stop()
@@ -107,5 +115,6 @@ class MediaPlayerService : Service() {
         mediaPlayer?.stop()
         mediaPlayer?.release()
         mediaPlayer = null
+        unregisterReceiver(receiver)
     }
 }

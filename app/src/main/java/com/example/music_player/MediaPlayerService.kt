@@ -82,8 +82,8 @@ class MediaPlayerService : Service() {
         registerReceiver(receiver, filter)
     }
 
-    override fun onBind(intent: Intent): IBinder {
-        TODO("Return the communication channel to the service.")
+    override fun onBind(intent: Intent): IBinder? {
+        return null
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

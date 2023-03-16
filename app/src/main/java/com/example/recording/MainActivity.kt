@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var recorder: MediaRecorder? = null
     private var fileName = ""
+    private var state = State.RELEASE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,17 +29,28 @@ class MainActivity : AppCompatActivity() {
 
         fileName = "${externalCacheDir?.absolutePath}/audiorecordtest.3gp"
         binding.recordButton.setOnClickListener {
-            record()
+            when (state) {
+                State.RELEASE -> {
+                    record()
+                }
+                State.RECORDING -> {
+                    onRecord(false)
+                }
+                State.PLAYING -> {
+
+                }
+            }
         }
     }
 
     private fun onRecord(start: Boolean) = if (start) {
         startRecording()
     } else {
-
+        stopRecording()
     }
 
     private fun startRecording() {
+        state = State.RECORDING
         recorder = MediaRecorder().apply {
             setAudioSource(MediaRecorder.AudioSource.MIC)
             setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
@@ -64,6 +76,29 @@ class MainActivity : AppCompatActivity() {
         binding.playButton.alpha = 0.3f
         binding.stopButton.isEnabled = false
         binding.stopButton.alpha = 0.3f
+    }
+
+    private fun stopRecording() {
+        recorder?.apply {
+            stop()
+            release()
+        }
+        recorder = null
+
+        state = State.RELEASE
+
+        binding.recordButton.setImageDrawable(
+            ContextCompat.getDrawable(
+                this,
+                R.drawable.baseline_fiber_manual_record_24
+            )
+        )
+        binding.recordButton.imageTintList =
+            ColorStateList.valueOf(ContextCompat.getColor(this, R.color.red))
+        binding.playButton.isEnabled = true
+        binding.playButton.alpha = 1f
+        binding.stopButton.isEnabled = true
+        binding.stopButton.alpha = 1f
     }
 
     private fun record() {
@@ -142,6 +177,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    enum class State {
+        RELEASE, RECORDING, PLAYING
     }
 
     companion object {

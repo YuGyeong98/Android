@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
+import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Bundle
@@ -19,6 +20,7 @@ import java.io.IOException
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var recorder: MediaRecorder? = null
+    private var player: MediaPlayer? = null
     private var fileName = ""
     private var state = State.RELEASE
 
@@ -36,8 +38,18 @@ class MainActivity : AppCompatActivity() {
                 State.RECORDING -> {
                     onRecord(false)
                 }
-                State.PLAYING -> {
-
+                else -> {
+                    // do nothing
+                }
+            }
+        }
+        binding.playButton.setOnClickListener {
+            when (state) {
+                State.RELEASE -> {
+                    onPlay(true)
+                }
+                else -> {
+                    // do nothing
                 }
             }
         }
@@ -47,6 +59,12 @@ class MainActivity : AppCompatActivity() {
         startRecording()
     } else {
         stopRecording()
+    }
+
+    private fun onPlay(start: Boolean) = if (start) {
+        startPlaying()
+    } else {
+
     }
 
     private fun startRecording() {
@@ -99,6 +117,22 @@ class MainActivity : AppCompatActivity() {
         binding.playButton.alpha = 1f
         binding.stopButton.isEnabled = true
         binding.stopButton.alpha = 1f
+    }
+
+    private fun startPlaying() {
+        state = State.PLAYING
+        player = MediaPlayer().apply {
+            try {
+                setDataSource(fileName)
+                prepare()
+                start()
+            } catch (e: IOException) {
+                Log.e(LOG_TAG, "prepare() failed $e")
+            }
+        }
+
+        binding.recordButton.isEnabled = false
+        binding.recordButton.alpha = 0.3f
     }
 
     private fun record() {

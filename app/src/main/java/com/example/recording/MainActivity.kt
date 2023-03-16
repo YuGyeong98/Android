@@ -53,6 +53,16 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        binding.stopButton.setOnClickListener {
+            when (state) {
+                State.PLAYING -> {
+                    onPlay(false)
+                }
+                else -> {
+                    // do nothing
+                }
+            }
+        }
     }
 
     private fun onRecord(start: Boolean) = if (start) {
@@ -64,7 +74,7 @@ class MainActivity : AppCompatActivity() {
     private fun onPlay(start: Boolean) = if (start) {
         startPlaying()
     } else {
-
+        stopPlaying()
     }
 
     private fun startRecording() {
@@ -133,6 +143,15 @@ class MainActivity : AppCompatActivity() {
 
         binding.recordButton.isEnabled = false
         binding.recordButton.alpha = 0.3f
+    }
+
+    private fun stopPlaying() {
+        state = State.RELEASE
+        player?.release()
+        player = null
+
+        binding.recordButton.isEnabled = true
+        binding.recordButton.alpha = 1f
     }
 
     private fun record() {

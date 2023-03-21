@@ -237,7 +237,11 @@ class MainActivity : AppCompatActivity(), OnTimerTickListener {
     }
 
     override fun onTick(duration: Long) { // 최대 진폭에 따라 waveform view 그리기
-        binding.waveformView.addAmplitude(recorder?.maxAmplitude?.toFloat() ?: 0f)
+        if (state == State.PLAYING) {
+            binding.waveformView.replayAmplitude()
+        } else if (state == State.RECORDING) {
+            binding.waveformView.addAmplitude(recorder?.maxAmplitude?.toFloat() ?: 0f)
+        }
     }
 
     enum class State {

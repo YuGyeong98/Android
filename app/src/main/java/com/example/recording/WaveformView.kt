@@ -16,6 +16,7 @@ class WaveformView @JvmOverloads constructor(
     private val ampList = mutableListOf<Float>() // 계속해서 녹음된 데이터 리스트 - 원시 데이터
     private val rectList = mutableListOf<RectF>() // 계속해서 그려질 데이터 리스트
     private val rectWidth = 15f
+    private var tick = 0
     private val redPaint = Paint().apply {
         color = Color.RED
     }
@@ -43,6 +44,23 @@ class WaveformView @JvmOverloads constructor(
             rectF.right = rectF.left + (rectWidth - 5f)
             rectList.add(rectF)
         }
+        invalidate()
+    }
+
+    fun replayAmplitude() {
+        rectList.clear()
+        val maxRect = (this.width / rectWidth).toInt()
+        val amps = ampList.take(tick).takeLast(maxRect) // amplist가 이미 쌓여있는 상태이므로 take로 가져온다.
+
+        for ((i, amp) in amps.withIndex()) {
+            val rectF = RectF()
+            rectF.top = this.height / 2 - amp / 2
+            rectF.bottom = rectF.top + amp
+            rectF.left = i * rectWidth
+            rectF.right = rectF.left + (rectWidth - 5f)
+            rectList.add(rectF)
+        }
+        tick += 1
         invalidate()
     }
 }

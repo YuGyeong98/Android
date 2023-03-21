@@ -17,8 +17,9 @@ import androidx.core.content.ContextCompat
 import com.example.recording.databinding.ActivityMainBinding
 import java.io.IOException
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnTimerTickListener {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var timer: Timer
     private var recorder: MediaRecorder? = null
     private var player: MediaPlayer? = null
     private var fileName = ""
@@ -30,6 +31,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         fileName = "${externalCacheDir?.absolutePath}/audiorecordtest.3gp"
+        timer = Timer(this)
+
         binding.recordButton.setOnClickListener {
             when (state) {
                 State.RELEASE -> {
@@ -91,6 +94,7 @@ class MainActivity : AppCompatActivity() {
             }
             start()
         }
+        timer.start()
 
         binding.recordButton.setImageDrawable(
             ContextCompat.getDrawable(
@@ -112,7 +116,7 @@ class MainActivity : AppCompatActivity() {
             release()
         }
         recorder = null
-
+        timer.stop()
         state = State.RELEASE
 
         binding.recordButton.setImageDrawable(
@@ -140,7 +144,7 @@ class MainActivity : AppCompatActivity() {
                 Log.e(LOG_TAG, "prepare() failed $e")
             }
         }
-
+        timer.start()
         binding.recordButton.isEnabled = false
         binding.recordButton.alpha = 0.3f
     }
@@ -149,7 +153,7 @@ class MainActivity : AppCompatActivity() {
         state = State.RELEASE
         player?.release()
         player = null
-
+        timer.stop()
         binding.recordButton.isEnabled = true
         binding.recordButton.alpha = 1f
     }
@@ -230,6 +234,9 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onTick(duration: Long) { // 최대 진폭에 따라 waveform view 그리기
     }
 
     enum class State {

@@ -146,6 +146,9 @@ class MainActivity : AppCompatActivity(), OnTimerTickListener {
         }
         binding.waveformView.clearWave()
         timer.start()
+        player?.setOnCompletionListener {
+            stopPlaying()
+        }
         binding.recordButton.isEnabled = false
         binding.recordButton.alpha = 0.3f
     }

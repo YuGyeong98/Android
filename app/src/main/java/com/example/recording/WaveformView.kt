@@ -63,4 +63,14 @@ class WaveformView @JvmOverloads constructor(
         tick += 1
         invalidate()
     }
+
+    fun clearData() {
+        ampList.clear()
+    }
+
+    fun clearWave() {
+        rectList.clear()
+        tick = 0
+        invalidate()
+    }
 }

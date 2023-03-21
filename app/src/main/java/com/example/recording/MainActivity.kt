@@ -94,8 +94,8 @@ class MainActivity : AppCompatActivity(), OnTimerTickListener {
             }
             start()
         }
+        binding.waveformView.clearData()
         timer.start()
-
         binding.recordButton.setImageDrawable(
             ContextCompat.getDrawable(
                 this,
@@ -144,6 +144,7 @@ class MainActivity : AppCompatActivity(), OnTimerTickListener {
                 Log.e(LOG_TAG, "prepare() failed $e")
             }
         }
+        binding.waveformView.clearWave()
         timer.start()
         binding.recordButton.isEnabled = false
         binding.recordButton.alpha = 0.3f

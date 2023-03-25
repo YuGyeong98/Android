@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import com.example.client_server.databinding.ActivityMainBinding
+import com.google.gson.Gson
 import okhttp3.*
 import java.io.IOException
 
@@ -41,10 +42,11 @@ class MainActivity : AppCompatActivity() {
                 override fun onResponse(call: Call, response: Response) {
                     if (response.isSuccessful) {
                         val res = response.body?.string()
+                        val message = Gson().fromJson(res, Message::class.java)
                         runOnUiThread {
                             binding.connectTextView.apply {
                                 isVisible = true
-                                text = res
+                                text = message.message
                             }
                             binding.serverHostEditText.isVisible = false
                             binding.connectButton.isVisible = false

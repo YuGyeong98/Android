@@ -1,5 +1,7 @@
 # 클라이언트-서버 앱
 <p align="center">
+  <img src="https://user-images.githubusercontent.com/58517873/227843757-914d11b2-fda3-4a11-b2a1-dba9dcaaa1f9.png" width="200px">
+  <img src="https://user-images.githubusercontent.com/58517873/227843752-628275d0-5422-49d0-9846-d5d2d87b118b.png" width="200px">
   <img src="https://user-images.githubusercontent.com/58517873/227720694-a2168cd7-0f81-413b-8172-5575307d69c1.png" width="200px">
 </p>
 

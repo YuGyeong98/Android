@@ -1,9 +1,7 @@
 # 이미지 앨범 앱
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/58517873/221727776-08603d23-607c-4ee1-9bb1-3507d1f59a82.png" width="200px">
-  <img src="https://user-images.githubusercontent.com/58517873/221724509-48eef3d1-4635-4c00-ac7f-7900a5d21ee5.png" width="200px">
-  <img src="https://user-images.githubusercontent.com/58517873/221726652-8de073b3-de95-4b20-a95a-35659a8deb8d.png" width="200px">
-  <img src="https://user-images.githubusercontent.com/58517873/221726618-bf850814-e28d-4455-b361-7dada8c16f6f.png" width="200px">
+  <img src="https://user-images.githubusercontent.com/58517873/227845795-aef89606-30eb-4923-a7f5-e2da89ba629b.png" width="200px">
+  <img src="https://user-images.githubusercontent.com/58517873/227845804-7886a8c5-453f-4165-92e7-22dbd6c5a2ed.png" width="200px">
 </p>
 
 ## 🛠 Features

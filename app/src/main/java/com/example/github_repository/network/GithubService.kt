@@ -15,5 +15,5 @@ interface GithubService {
 
     @Headers("Authorization: Bearer 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")
     @GET("users/{username}/repos")
-    fun listRepos(@Path("username") username: String): Call<Repo>
+    fun listRepos(@Path("username") username: String): Call<List<Repo>>
 }

@@ -40,19 +40,24 @@ class RepoActivity : AppCompatActivity() {
             addItemDecoration(divider)
         }
 
+        listRepo(username)
+    }
+
+    private fun listRepo(username: String) {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://api.github.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         val service = retrofit.create(GithubService::class.java)
-        service.listRepos("YuGyeong98").enqueue(object : Callback<List<Repo>> {
+        service.listRepos(username).enqueue(object : Callback<List<Repo>> {
             override fun onResponse(call: Call<List<Repo>>, response: Response<List<Repo>>) {
                 repoAdapter.submitList(response.body())
             }
 
             override fun onFailure(call: Call<List<Repo>>, t: Throwable) {
                 Toast.makeText(this@RepoActivity, "에러가 발생하였습니다.", Toast.LENGTH_SHORT).show()
+                t.printStackTrace()
             }
         })
     }

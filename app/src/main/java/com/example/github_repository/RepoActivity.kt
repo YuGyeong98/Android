@@ -3,6 +3,7 @@ package com.example.github_repository
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.github_repository.adapter.RepoAdapter
 import com.example.github_repository.databinding.ActivityRepoBinding
@@ -27,6 +28,8 @@ class RepoActivity : AppCompatActivity() {
         binding.repoRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = repoAdapter
+            val divider = DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
+            addItemDecoration(divider)
         }
 
         val retrofit = Retrofit.Builder()

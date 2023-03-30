@@ -1,5 +1,6 @@
 package com.example.github_repository
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -23,7 +24,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        userAdapter = UserAdapter()
+        userAdapter = UserAdapter {
+            val intent = Intent(this@MainActivity, RepoActivity::class.java)
+            intent.putExtra("username", it.username)
+            startActivity(intent)
+        }
         binding.userRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = userAdapter

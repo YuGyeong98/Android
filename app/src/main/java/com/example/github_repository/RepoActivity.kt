@@ -24,6 +24,9 @@ class RepoActivity : AppCompatActivity() {
         binding = ActivityRepoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val username = intent.getStringExtra("username") ?: return
+        binding.usernameTextView.text = username
+
         repoAdapter = RepoAdapter()
         binding.repoRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)

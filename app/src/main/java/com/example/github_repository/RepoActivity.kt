@@ -1,5 +1,7 @@
 package com.example.github_repository
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -27,7 +29,10 @@ class RepoActivity : AppCompatActivity() {
         val username = intent.getStringExtra("username") ?: return
         binding.usernameTextView.text = username
 
-        repoAdapter = RepoAdapter()
+        repoAdapter = RepoAdapter {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it.htmlUrl))
+            startActivity(intent)
+        }
         binding.repoRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = repoAdapter

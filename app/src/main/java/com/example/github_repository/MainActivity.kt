@@ -2,8 +2,11 @@ package com.example.github_repository
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.github_repository.adapter.UserAdapter
 import com.example.github_repository.databinding.ActivityMainBinding
@@ -18,6 +21,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var userAdapter: UserAdapter
+    private var searchFor = ""
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,13 +39,24 @@ class MainActivity : AppCompatActivity() {
             adapter = userAdapter
         }
 
+        val runnable = Runnable {
+            searchUser()
+        }
+        binding.searchEditText.addTextChangedListener {
+            searchFor = it.toString()
+            handler.removeCallbacks(runnable) // 이전 호출이 있었다면 지우고, 300ms 이후에 api 호출
+            handler.postDelayed(runnable, 300)
+        }
+    }
+
+    private fun searchUser() {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://api.github.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         val service = retrofit.create(GithubService::class.java)
-        service.searchUsers("YuGyeong98").enqueue(object : Callback<UserDto> {
+        service.searchUsers(searchFor).enqueue(object : Callback<UserDto> {
             override fun onResponse(call: Call<UserDto>, response: Response<UserDto>) {
                 userAdapter.submitList(response.body()?.items)
             }

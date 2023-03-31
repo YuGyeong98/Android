@@ -61,7 +61,7 @@ class RepoActivity : AppCompatActivity() {
         service.listRepos(username, page).enqueue(object : Callback<List<Repo>> {
             override fun onResponse(call: Call<List<Repo>>, response: Response<List<Repo>>) {
                 hasMore = response.body()?.count() == 30
-                repoAdapter.submitList(response.body())
+                repoAdapter.submitList(repoAdapter.currentList + response.body().orEmpty())
             }
 
             override fun onFailure(call: Call<List<Repo>>, t: Throwable) {

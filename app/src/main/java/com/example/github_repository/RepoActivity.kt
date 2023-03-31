@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.github_repository.adapter.RepoAdapter
 import com.example.github_repository.databinding.ActivityRepoBinding
 import com.example.github_repository.model.Repo
@@ -20,6 +21,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 class RepoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRepoBinding
     private lateinit var repoAdapter: RepoAdapter
+    private var page = 0
+    private var hasMore = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,29 +32,41 @@ class RepoActivity : AppCompatActivity() {
         val username = intent.getStringExtra("username") ?: return
         binding.usernameTextView.text = username
 
+        val linearLayoutManager = LinearLayoutManager(this)
         repoAdapter = RepoAdapter {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it.htmlUrl))
             startActivity(intent)
         }
         binding.repoRecyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = linearLayoutManager
             adapter = repoAdapter
             val divider = DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
             addItemDecoration(divider)
         }
-
-        listRepo(username)
+        binding.repoRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val totalCount = linearLayoutManager.itemCount // 1부터 시작
+                val lastVisiblePosition = linearLayoutManager.findLastCompletelyVisibleItemPosition() // 0부터 시작
+                if (lastVisiblePosition >= totalCount-1 && hasMore) {
+                    page += 1
+                    listRepo(username, page)
+                }
+            }
+        })
+        listRepo(username, 0)
     }
 
-    private fun listRepo(username: String) {
+    private fun listRepo(username: String, page: Int) {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://api.github.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         val service = retrofit.create(GithubService::class.java)
-        service.listRepos(username).enqueue(object : Callback<List<Repo>> {
+        service.listRepos(username, page).enqueue(object : Callback<List<Repo>> {
             override fun onResponse(call: Call<List<Repo>>, response: Response<List<Repo>>) {
+                hasMore = response.body()?.count() == 30
                 repoAdapter.submitList(response.body())
             }
 

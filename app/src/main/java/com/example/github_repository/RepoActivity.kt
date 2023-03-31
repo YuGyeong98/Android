@@ -11,12 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.github_repository.adapter.RepoAdapter
 import com.example.github_repository.databinding.ActivityRepoBinding
 import com.example.github_repository.model.Repo
+import com.example.github_repository.network.APIClient
 import com.example.github_repository.network.GithubService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class RepoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRepoBinding
@@ -58,12 +57,7 @@ class RepoActivity : AppCompatActivity() {
     }
 
     private fun listRepo(username: String, page: Int) {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.github.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val service = retrofit.create(GithubService::class.java)
+        val service = APIClient.retrofit.create(GithubService::class.java)
         service.listRepos(username, page).enqueue(object : Callback<List<Repo>> {
             override fun onResponse(call: Call<List<Repo>>, response: Response<List<Repo>>) {
                 hasMore = response.body()?.count() == 30

@@ -11,12 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.github_repository.adapter.UserAdapter
 import com.example.github_repository.databinding.ActivityMainBinding
 import com.example.github_repository.model.UserDto
+import com.example.github_repository.network.APIClient
 import com.example.github_repository.network.GithubService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -50,12 +49,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun searchUser() {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.github.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val service = retrofit.create(GithubService::class.java)
+        val service = APIClient.retrofit.create(GithubService::class.java)
         service.searchUsers(searchFor).enqueue(object : Callback<UserDto> {
             override fun onResponse(call: Call<UserDto>, response: Response<UserDto>) {
                 userAdapter.submitList(response.body()?.items)

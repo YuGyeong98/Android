@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.news.databinding.ActivityMainBinding
+import org.jsoup.Jsoup
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,7 +31,27 @@ class MainActivity : AppCompatActivity() {
     private fun Call<News>.submitList() {
         enqueue(object : Callback<News> {
             override fun onResponse(call: Call<News>, response: Response<News>) {
-                newsAdapter.submitList(response.body()?.channel?.items)
+                val list = response.body()?.channel?.items.orEmpty().transform()
+                newsAdapter.submitList(list)
+
+                list.forEachIndexed { index, newsModel ->
+                    Thread {
+                        try {
+                            val jsoup = Jsoup.connect(newsModel.link).get()
+                            val elements = jsoup.select("meta[property^=og:]") // 태그명[속성명^=속성값] - 속성명이 특정 속성값으로 시작하는 모든 요소
+                            val ogImageNode = elements.find { node ->
+                                node.attr("property") == "og:image"
+                            }
+                            val imageUrl = ogImageNode?.attr("content")
+                            newsModel.imageUrl = imageUrl
+                        } catch (e: java.lang.Exception) {
+                            e.printStackTrace()
+                        }
+                        runOnUiThread {
+                            newsAdapter.notifyItemChanged(index)
+                        }
+                    }.start()
+                }
             }
 
             override fun onFailure(call: Call<News>, t: Throwable) {

@@ -25,6 +25,42 @@ class MainActivity : AppCompatActivity() {
         }
 
         val service = APIClient.retrofit.create(NewsService::class.java)
+        binding.politicsChip.setOnClickListener {
+            binding.chipGroup.clearCheck()
+            binding.politicsChip.isChecked = true
+            service.politicsNews().submitList()
+        }
+        binding.economyChip.setOnClickListener {
+            binding.chipGroup.clearCheck()
+            binding.economyChip.isChecked = true
+            service.economyNews().submitList()
+        }
+        binding.societyChip.setOnClickListener {
+            binding.chipGroup.clearCheck()
+            binding.societyChip.isChecked = true
+            service.societyNews().submitList()
+        }
+        binding.lifeChip.setOnClickListener {
+            binding.chipGroup.clearCheck()
+            binding.lifeChip.isChecked = true
+            service.lifeNews().submitList()
+        }
+        binding.globalChip.setOnClickListener {
+            binding.chipGroup.clearCheck()
+            binding.globalChip.isChecked = true
+            service.globalNews().submitList()
+        }
+        binding.entertainmentChip.setOnClickListener {
+            binding.chipGroup.clearCheck()
+            binding.entertainmentChip.isChecked = true
+            service.entertainmentNews().submitList()
+        }
+        binding.sportsChip.setOnClickListener {
+            binding.chipGroup.clearCheck()
+            binding.sportsChip.isChecked = true
+            service.sportsNews().submitList()
+        }
+
         service.politicsNews().submitList()
     }
 

@@ -22,18 +22,11 @@
             android:paddingEnd="10dp">
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/feedChip"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="피드" />
-
-            <com.google.android.material.chip.Chip
                 android:id="@+id/politicsChip"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:checked="true"
                 android:text="정치" />
 
             <com.google.android.material.chip.Chip

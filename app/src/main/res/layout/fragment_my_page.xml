@@ -40,7 +40,7 @@
         app:layout_constraintTop_toBottomOf="@id/descriptionEditText" />
 
     <Button
-        android:id="@+id/singOutButton"
+        android:id="@+id/signOutButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"

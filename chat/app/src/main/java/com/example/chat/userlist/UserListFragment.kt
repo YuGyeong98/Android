@@ -1,4 +1,4 @@
-package com.example.chat.user
+package com.example.chat.userlist
 
 import android.os.Bundle
 import android.util.Log
@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chat.DBKey.Companion.DB_USERS
 import com.example.chat.R
-import com.example.chat.databinding.FragmentUserBinding
+import com.example.chat.databinding.FragmentUserListBinding
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -16,19 +16,19 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-class UserFragment : Fragment(R.layout.fragment_user) {
-    private lateinit var binding: FragmentUserBinding
+class UserListFragment : Fragment(R.layout.fragment_user_list) {
+    private lateinit var binding: FragmentUserListBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentUserBinding.bind(view)
+        binding = FragmentUserListBinding.bind(view)
 
-        val userAdapter = UserAdapter()
+        val userListAdapter = UserListAdapter()
         val currentUserId = Firebase.auth.currentUser?.uid ?: ""
 
-        binding.userRecyclerView.apply {
+        binding.userListRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = userAdapter
+            adapter = userListAdapter
         }
 
         Firebase.database.reference.child(DB_USERS)
@@ -41,7 +41,7 @@ class UserFragment : Fragment(R.layout.fragment_user) {
                             userList.add(user)
                         }
                     }
-                    userAdapter.submitList(userList)
+                    userListAdapter.submitList(userList)
                 }
 
                 override fun onCancelled(error: DatabaseError) {

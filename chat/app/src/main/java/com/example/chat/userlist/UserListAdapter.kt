@@ -1,4 +1,4 @@
-package com.example.chat.user
+package com.example.chat.userlist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,17 +7,17 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chat.databinding.ItemUserBinding
 
-class UserAdapter : ListAdapter<UserItem, UserAdapter.UserViewHolder>(diffUtil) {
-    inner class UserViewHolder(private val binding: ItemUserBinding) :
+class UserListAdapter : ListAdapter<UserItem, UserListAdapter.UserListViewHolder>(diffUtil) {
+    inner class UserListViewHolder(private val binding: ItemUserBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: UserItem) {
-            binding.nicknameTextView.text = item.username
+            binding.usernameTextView.text = item.username
             binding.descriptionTextView.text = item.description
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
-        return UserViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserListViewHolder {
+        return UserListViewHolder(
             ItemUserBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
@@ -26,7 +26,7 @@ class UserAdapter : ListAdapter<UserItem, UserAdapter.UserViewHolder>(diffUtil) 
         )
     }
 
-    override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: UserListViewHolder, position: Int) {
         val user = currentList[position]
         holder.bind(user)
     }

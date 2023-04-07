@@ -1,4 +1,4 @@
-package com.example.chat.user
+package com.example.chat.userlist
 
 data class UserItem(
     val userId: String? = null,

@@ -12,4 +12,9 @@ class ChatRoomActivity : AppCompatActivity() {
         binding = ActivityChatRoomBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
+
+    companion object {
+        const val CHAT_ROOM_ID = "CHAT_ROOM_ID"
+        const val OTHER_USER_ID = "OTHER_USER_ID"
+    }
 }

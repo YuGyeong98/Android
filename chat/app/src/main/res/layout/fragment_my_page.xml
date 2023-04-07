@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/nameEditText"
+        android:id="@+id/usernameEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -25,9 +25,9 @@
         android:layout_marginTop="16dp"
         android:hint="상태 메시지"
         android:inputType="text"
-        app:layout_constraintEnd_toEndOf="@id/nameEditText"
-        app:layout_constraintStart_toStartOf="@id/nameEditText"
-        app:layout_constraintTop_toBottomOf="@id/nameEditText" />
+        app:layout_constraintEnd_toEndOf="@id/usernameEditText"
+        app:layout_constraintStart_toStartOf="@id/usernameEditText"
+        app:layout_constraintTop_toBottomOf="@id/usernameEditText" />
 
     <Button
         android:id="@+id/applyButton"
@@ -35,8 +35,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:text="적용하기"
-        app:layout_constraintEnd_toEndOf="@id/nameEditText"
-        app:layout_constraintStart_toStartOf="@id/nameEditText"
+        app:layout_constraintEnd_toEndOf="@id/usernameEditText"
+        app:layout_constraintStart_toStartOf="@id/usernameEditText"
         app:layout_constraintTop_toBottomOf="@id/descriptionEditText" />
 
     <Button
@@ -45,8 +45,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="로그아웃"
-        app:layout_constraintEnd_toEndOf="@id/nameEditText"
-        app:layout_constraintStart_toStartOf="@id/nameEditText"
+        app:layout_constraintEnd_toEndOf="@id/usernameEditText"
+        app:layout_constraintStart_toStartOf="@id/usernameEditText"
         app:layout_constraintTop_toBottomOf="@id/applyButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

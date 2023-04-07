@@ -11,7 +11,7 @@ class UserAdapter : ListAdapter<UserItem, UserAdapter.UserViewHolder>(diffUtil) 
     inner class UserViewHolder(private val binding: ItemUserBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: UserItem) {
-            binding.nicknameTextView.text = item.nickname
+            binding.nicknameTextView.text = item.username
             binding.descriptionTextView.text = item.description
         }
     }
@@ -34,7 +34,7 @@ class UserAdapter : ListAdapter<UserItem, UserAdapter.UserViewHolder>(diffUtil) 
     companion object {
         val diffUtil = object : DiffUtil.ItemCallback<UserItem>() {
             override fun areItemsTheSame(oldItem: UserItem, newItem: UserItem): Boolean {
-                return oldItem.id == newItem.id
+                return oldItem.userId == newItem.userId
             }
 
             override fun areContentsTheSame(oldItem: UserItem, newItem: UserItem): Boolean {

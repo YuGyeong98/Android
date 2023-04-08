@@ -11,7 +11,7 @@ import com.example.chat.databinding.ItemChatBinding
 import com.example.chat.userlist.UserItem
 
 class ChatRoomAdapter : ListAdapter<ChatItem, ChatRoomAdapter.ChatRoomViewHolder>(diffUtil) {
-    val otherUser: UserItem? = null
+    var otherUser: UserItem? = null
 
     inner class ChatRoomViewHolder(private val binding: ItemChatBinding) :
         RecyclerView.ViewHolder(binding.root) {

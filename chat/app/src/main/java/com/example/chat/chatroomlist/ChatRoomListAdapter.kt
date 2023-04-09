@@ -7,13 +7,16 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chat.databinding.ItemChatRoomBinding
 
-class ChatRoomListAdapter :
+class ChatRoomListAdapter(private val onClick: (ChatRoomItem) -> Unit) :
     ListAdapter<ChatRoomItem, ChatRoomListAdapter.ChatRoomListViewHolder>(diffUtil) {
     inner class ChatRoomListViewHolder(private val binding: ItemChatRoomBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ChatRoomItem) {
             binding.otherUsernameTextView.text = item.otherUsername
             binding.lastMessageTextView.text = item.lastMessage
+            binding.root.setOnClickListener {
+                onClick(item)
+            }
         }
     }
 

@@ -8,5 +8,6 @@ class DBKey {
         const val DB_USER_ID = "userId"
         const val DB_USER_NAME = "username"
         const val DB_DESCRIPTION = "description"
+        const val DB_FCM_TOKEN = "fcmToken"
     }
 }

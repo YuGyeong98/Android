@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.chat.DBKey.Companion.DB_FCM_TOKEN
 import com.example.chat.DBKey.Companion.DB_USERS
 import com.example.chat.DBKey.Companion.DB_USER_ID
 import com.example.chat.DBKey.Companion.DB_USER_NAME
@@ -12,6 +13,7 @@ import com.example.chat.databinding.ActivityLoginBinding
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -29,16 +31,20 @@ class LoginActivity : AppCompatActivity() {
                 .addOnCompleteListener(this) { task ->
                     val currentUser = Firebase.auth.currentUser
                     if (task.isSuccessful && currentUser != null) {
-                        val userId = currentUser.uid
-                        val userUpdates = hashMapOf<String, Any>(
-                            DB_USER_ID to userId,
-                            DB_USER_NAME to email,
-                        )
-                        Firebase.database.reference.child(DB_USERS).child(userId).updateChildren(userUpdates)
+                        FirebaseMessaging.getInstance().token.addOnCompleteListener {
+                            val userToken = it.result
+                            val userId = currentUser.uid
+                            val userUpdates = hashMapOf<String, Any>(
+                                DB_USER_ID to userId,
+                                DB_USER_NAME to email,
+                                DB_FCM_TOKEN to userToken
+                            )
+                            Firebase.database.reference.child(DB_USERS).child(userId).updateChildren(userUpdates)
 
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
-                        finish()
+                            val intent = Intent(this, MainActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
                     } else {
                         Toast.makeText(this, "회원가입 실패", Toast.LENGTH_SHORT).show()
                         Log.e("SIGN_UP", task.exception.toString())

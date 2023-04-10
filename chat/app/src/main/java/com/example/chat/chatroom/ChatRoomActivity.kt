@@ -74,14 +74,12 @@ class ChatRoomActivity : AppCompatActivity() {
             Firebase.database.reference.updateChildren(chatUpdates)
 
             val client = OkHttpClient()
-            val notification = JSONObject().apply {
-                put("title", getString(R.string.app_name))
-                put("body", message)
-            }
-            val root = JSONObject().apply {
-                put("to", otherFcmToken)
-                put("notification", notification)
-            }
+            val notification = JSONObject()
+            val root = JSONObject()
+            notification.put("title", getString(R.string.app_name))
+            notification.put("body", message)
+            root.put("to", otherFcmToken)
+            root.put("notification", notification)
             val body = root.toString()
                 .toRequestBody("application/json; charset=utf-8".toMediaType())
             val request = Request.Builder()

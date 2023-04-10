@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.chat.DBKey.Companion.DB_CHATS
 import com.example.chat.DBKey.Companion.DB_CHAT_ROOMS
 import com.example.chat.DBKey.Companion.DB_USERS
@@ -26,6 +27,7 @@ import java.io.IOException
 class ChatRoomActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChatRoomBinding
     private lateinit var chatRoomAdapter: ChatRoomAdapter
+    private lateinit var linearLayoutManager: LinearLayoutManager
     private var otherUserId = ""
     private var otherFcmToken = ""
     private var chatRoomId = ""
@@ -100,11 +102,21 @@ class ChatRoomActivity : AppCompatActivity() {
             binding.messageEditText.text.clear()
         }
 
+        linearLayoutManager = LinearLayoutManager(this)
         chatRoomAdapter = ChatRoomAdapter()
         binding.chatRoomRecyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = linearLayoutManager
             adapter = chatRoomAdapter
         }
+
+        chatRoomAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                super.onItemRangeInserted(positionStart, itemCount)
+                linearLayoutManager.smoothScrollToPosition(
+                    binding.chatRoomRecyclerView, null, chatRoomAdapter.itemCount
+                )
+            }
+        })
     }
 
     private fun getOtherUserData() {

@@ -3,6 +3,7 @@ package com.example.weather
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.weather.databinding.ActivityMainBinding
+import com.example.weather.databinding.ItemForecastBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -21,6 +22,18 @@ class MainActivity : AppCompatActivity() {
                 binding.temperatureTextView.text = getString(R.string.temperature_text, currentForecast.tmp)
                 binding.skyTextView.text = currentForecast.sky
                 binding.precipitationTextView.text = getString(R.string.precipitation_text, currentForecast.pop)
+                binding.forecastLinearLayout.apply {
+                    forecastList.forEachIndexed { index, forecast ->
+                        if (index == 0) {
+                            return@forEachIndexed
+                        }
+                        val itemView = ItemForecastBinding.inflate(layoutInflater)
+                        itemView.timeTextView.text = forecast.forecastTime.take(2).plus("시")
+                        itemView.weatherTextView.text = forecast.weather
+                        itemView.temperatureTextView.text = getString(R.string.temperature_text, forecast.tmp)
+                        addView(itemView.root)
+                    }
+                }
             },
             failureCallback = { throwable ->
                 throwable.printStackTrace()

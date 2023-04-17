@@ -7,4 +7,9 @@ data class Forecast(
     var pty: String = "",
     var sky: String = "",
     var tmp: Double = 0.0,
-)
+) {
+    val weather: String
+        get() {
+            return if (pty == "" || pty == "없음") sky else pty
+        }
+}

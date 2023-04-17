@@ -1,6 +1,8 @@
 package com.example.weather
 
 import android.content.pm.PackageManager
+import android.location.Geocoder
+import android.location.Location
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -8,9 +10,14 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.weather.databinding.ActivityMainBinding
 import com.example.weather.databinding.ItemForecastBinding
+import com.google.android.gms.location.*
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationCallback: LocationCallback
+    private lateinit var locationRequest: LocationRequest
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,11 +27,11 @@ class MainActivity : AppCompatActivity() {
         checkAccessCoarseLocationPermission()
     }
 
-    private fun getVillageForecast() {
+    private fun getVillageForecast(latitude: Double, longitude: Double) {
         WeatherRepository.getVillageForecast(
             serviceKey = getString(R.string.weather_service_key),
-            latitude = 37.3592,
-            longitude = 127.1048,
+            latitude = latitude,
+            longitude = longitude,
             successCallback = { forecastList ->
                 val currentForecast = forecastList.first()
                 binding.temperatureTextView.text = getString(R.string.temperature_text, currentForecast.tmp)
@@ -49,13 +56,57 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    private fun setLocationTextView(location: Location) {
+        val addressList = Geocoder(this, Locale.KOREA).getFromLocation(
+            location.latitude,
+            location.longitude,
+            1
+        )
+        binding.locationTextView.text = addressList?.get(0)?.thoroughfare
+    }
+
+    private fun setLastLocationAddress() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                if (location != null) {
+                    setLocationTextView(location)
+                    getVillageForecast(location.latitude, location.longitude)
+                } else {
+                    locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000).apply {
+                        setWaitForAccurateLocation(false)
+                        setMinUpdateIntervalMillis(500)
+                        setMaxUpdateDelayMillis(1000)
+                    }.build()
+                    locationCallback = object : LocationCallback() {
+                        override fun onLocationResult(locationResult: LocationResult) {
+                            for (loc in locationResult.locations) {
+                                setLocationTextView(loc)
+                                getVillageForecast(loc.latitude, loc.longitude)
+                            }
+                        }
+                    }
+                    fusedLocationClient.requestLocationUpdates(
+                        locationRequest,
+                        locationCallback,
+                        null
+                    )
+                }
+            }
+        }
+    }
+
     private fun checkAccessCoarseLocationPermission() {
         when {
             ContextCompat.checkSelfPermission(
                 this,
                 android.Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED -> {
-                getVillageForecast()
+                setLastLocationAddress()
             }
             shouldShowRequestPermissionRationale(android.Manifest.permission.ACCESS_COARSE_LOCATION) -> {
                 showPermissionRationaleDialog()
@@ -95,7 +146,7 @@ class MainActivity : AppCompatActivity() {
         when (requestCode) {
             REQUEST_ACCESS_COARSE_LOCATION -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getVillageForecast()
+                    setLastLocationAddress()
                 } else {
                     AlertDialog.Builder(this).apply {
                         setMessage("위치 권한 거부로 인해 날씨를 표시할 수 없습니다. 설정 화면에서 직접 권한 허용을 해주세요.")

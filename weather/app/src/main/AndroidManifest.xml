@@ -29,7 +29,7 @@
             android:name=".UpdateWeatherService"
             android:foregroundServiceType="location" />
         <receiver
-            android:name=".AppWidgetProvider"
+            android:name=".WeatherAppWidgetProvider"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

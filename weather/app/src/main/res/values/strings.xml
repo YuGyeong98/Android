@@ -2,4 +2,7 @@
     <string name="app_name">weather</string>
     <string name="temperature_text">%.1f°</string>
     <string name="precipitation_text">강수확률 %d%%</string>
+    <string name="channel_id">widget_update_channel</string>
+    <string name="channel_text">날씨 업데이트</string>
+    <string name="channel_description">위젯 업데이트 채널</string>
 </resources>

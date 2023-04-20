@@ -26,7 +26,10 @@ class UpdateWeatherService : Service() {
                 Manifest.permission.ACCESS_BACKGROUND_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // todo 권한 허용 안되어 있으면 setting 액티비티로 넘어가기
+            updateAppWidget(REQUEST_SETTING_ACTIVITY, "권한 없음", "")
+            stopSelf()
+
+            return super.onStartCommand(intent, flags, startId)
         }
         LocationServices.getFusedLocationProviderClient(this).lastLocation.addOnSuccessListener { location ->
             WeatherRepository.getVillageForecast(
@@ -56,8 +59,14 @@ class UpdateWeatherService : Service() {
         temperature: CharSequence,
         weather: CharSequence
     ) {
-        val pendingIntent = Intent(this, UpdateWeatherService::class.java).let {
-            PendingIntent.getService(this, requestCode, it, PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntent = if (requestCode == REQUEST_WEATHER_INFO) {
+            Intent(this, UpdateWeatherService::class.java).let {
+                PendingIntent.getService(this, requestCode, it, PendingIntent.FLAG_IMMUTABLE)
+            }
+        } else {
+            Intent(this, SettingActivity::class.java).let {
+                PendingIntent.getActivity(this, requestCode, it, PendingIntent.FLAG_IMMUTABLE)
+            }
         }
         val views = RemoteViews(packageName, R.layout.widget_weather).apply {
             setTextViewText(R.id.temperatureTextView, temperature)

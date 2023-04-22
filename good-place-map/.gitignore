@@ -13,6 +13,8 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+/app/src/main/res/values/api_key.xml
 ### Android template
 # Built application files
 *.apk

@@ -1,6 +1,7 @@
 package com.example.good_place_map
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +17,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityMainBinding
     private lateinit var naverMap: NaverMap
     private val searchResultAdapter = SearchResultAdapter()
+    private var isMapInit = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,8 +40,19 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query?.isNotEmpty() == true) {
                     SearchRepository.getGoodPlace(query).enqueue(object : Callback<SearchResult> {
-                        override fun onResponse(call: Call<SearchResult>, response: Response<SearchResult>) {
-                            searchResultAdapter.submitList(response.body()?.items)
+                        override fun onResponse(
+                            call: Call<SearchResult>,
+                            response: Response<SearchResult>
+                        ) {
+                            val searchItemList = response.body()?.items.orEmpty()
+                            if (searchItemList.isEmpty()) {
+                                Toast.makeText(this@MainActivity, "검색 결과가 없습니다.", Toast.LENGTH_SHORT).show()
+                                return
+                            } else if (!isMapInit) {
+                                Toast.makeText(this@MainActivity, "오류가 발생하였습니다.", Toast.LENGTH_SHORT).show()
+                                return
+                            }
+                            searchResultAdapter.submitList(searchItemList)
                         }
 
                         override fun onFailure(call: Call<SearchResult>, t: Throwable) {
@@ -59,5 +72,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(map: NaverMap) {
         naverMap = map
+        isMapInit = true
     }
 }

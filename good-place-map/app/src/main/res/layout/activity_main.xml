@@ -21,4 +21,7 @@
         app:iconifiedByDefault="false"
         app:queryHint="검색어를 입력하세요." />
 
+    <include
+        layout="@layout/bottom_sheet" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

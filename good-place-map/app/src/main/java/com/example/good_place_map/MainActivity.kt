@@ -6,9 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.good_place_map.databinding.ActivityMainBinding
-import com.naver.maps.map.MapFragment
-import com.naver.maps.map.NaverMap
-import com.naver.maps.map.OnMapReadyCallback
+import com.naver.maps.map.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,7 +27,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 .also {
                     fm.beginTransaction().add(R.id.map_fragment, it).commit()
                 }
-        mapFragment.getMapAsync(this)
+        mapFragment.getMapAsync {
+            binding.logoView.setMap(it)
+        }
 
         binding.bottomSheetLayout.searchResultRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)

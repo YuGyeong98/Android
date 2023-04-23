@@ -8,7 +8,7 @@
     app:behavior_expandedOffset="100dp"
     app:behavior_fitToContents="false"
     app:behavior_hideable="false"
-    app:behavior_peekHeight="100dp"
+    app:behavior_peekHeight="90dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <View

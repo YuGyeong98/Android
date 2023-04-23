@@ -16,6 +16,8 @@
         android:textStyle="bold"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toStartOf="@id/categoryTextView"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="맛집입니다맛집입니다맛집입니다맛집입니다맛집입니다" />

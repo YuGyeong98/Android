@@ -73,5 +73,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(map: NaverMap) {
         naverMap = map
         isMapInit = true
+        naverMap.minZoom = 5.0
+        naverMap.maxZoom = 18.0
     }
 }

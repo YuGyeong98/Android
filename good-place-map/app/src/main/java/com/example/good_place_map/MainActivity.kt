@@ -6,10 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.good_place_map.databinding.ActivityMainBinding
+import com.naver.maps.geometry.LatLng
 import com.naver.maps.geometry.Tm128
-import com.naver.maps.map.MapFragment
-import com.naver.maps.map.NaverMap
-import com.naver.maps.map.OnMapReadyCallback
+import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import retrofit2.Call
 import retrofit2.Callback
@@ -63,6 +62,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                                 }
                             }
                             searchResultAdapter.submitList(searchItemList)
+                            moveCamera(markers.first().position, 14.0)
                         }
 
                         override fun onFailure(call: Call<SearchResult>, t: Throwable) {
@@ -78,6 +78,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 return true
             }
         })
+    }
+
+    private fun moveCamera(position: LatLng, zoom: Double) {
+        if (!isMapInit) return
+
+        val cameraUpdate = CameraUpdate.scrollAndZoomTo(position, zoom).animate(CameraAnimation.Easing)
+        naverMap.moveCamera(cameraUpdate)
     }
 
     override fun onMapReady(map: NaverMap) {

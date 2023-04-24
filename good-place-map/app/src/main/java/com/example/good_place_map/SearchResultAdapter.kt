@@ -6,8 +6,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.good_place_map.databinding.ItemSearchResultBinding
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.geometry.Tm128
 
-class SearchResultAdapter :
+class SearchResultAdapter(private val onClick: (LatLng) -> Unit) :
     ListAdapter<SearchItem, SearchResultAdapter.SearchItemViewHolder>(diffUtil) {
     inner class SearchItemViewHolder(private val binding: ItemSearchResultBinding) :
         ViewHolder(binding.root) {
@@ -15,6 +17,9 @@ class SearchResultAdapter :
             binding.titleTextView.text = item.title
             binding.roadAddressTextView.text = item.roadAddress
             binding.categoryTextView.text = item.category
+            binding.root.setOnClickListener {
+                onClick(Tm128(item.mapx.toDouble(), item.mapy.toDouble()).toLatLng())
+            }
         }
     }
 

@@ -17,7 +17,9 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityMainBinding
     private lateinit var naverMap: NaverMap
-    private val searchResultAdapter = SearchResultAdapter()
+    private val searchResultAdapter = SearchResultAdapter {
+        moveCamera(it, 17.0)
+    }
     private var isMapInit = false
     private var markers = emptyList<Marker>()
 

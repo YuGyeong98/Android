@@ -1,11 +1,10 @@
 package com.example.good_place_map
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
-import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import com.example.good_place_map.databinding.ActivityMainBinding
 import com.naver.maps.geometry.Tm128
 import com.naver.maps.map.MapFragment
@@ -22,6 +21,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private var isMapInit = false
     private var searchItemList = emptyList<SearchItem>()
     private var markers = emptyList<Marker>()
+    private var itemList = arrayListOf<SearchItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,10 +36,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         val fm = supportFragmentManager
-        val mapFragment = fm.findFragmentById(R.id.frameLayout) as MapFragment? ?: MapFragment.newInstance()
+        val mapFragment = fm.findFragmentById(R.id.mapFragment) as MapFragment? ?: MapFragment.newInstance()
                 .also {
                     fm.beginTransaction().apply {
-                        replace(R.id.frameLayout, it)
+                        add(R.id.mapFragment, it)
                         commit()
                     }
                 }
@@ -59,11 +59,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                                 return
                             }
 
-                            val bundle = bundleOf(getString(R.string.search_item_list) to searchItemList)
-                            fm.beginTransaction().replace(R.id.frameLayout, SearchResultFragment::class.java, bundle).commit()
+                            itemList.clear()
+                            searchItemList.forEach {
+                                itemList.add(it)
+                            }
 
-                            binding.searchView.isVisible = false
-                            binding.toolbar.isVisible = false
+                            Intent(this@MainActivity, SearchResultActivity::class.java).apply {
+                                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+                                putExtra(getString(R.string.search_item_list), itemList)
+                                startActivity(this)
+                            }
                         }
 
                         override fun onFailure(call: Call<SearchResult>, t: Throwable) {
@@ -80,6 +85,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         })
     }
+
 
     override fun onMapReady(map: NaverMap) {
         naverMap = map

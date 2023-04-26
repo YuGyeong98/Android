@@ -8,8 +8,7 @@ import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.good_place_map.databinding.ActivityMainBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
-import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
+import com.google.android.material.bottomsheet.BottomSheetBehavior.*
 import com.naver.maps.geometry.Tm128
 import com.naver.maps.map.MapFragment
 import com.naver.maps.map.NaverMap
@@ -37,8 +36,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         supportActionBar?.apply {
             setDisplayShowTitleEnabled(false)
         }
-        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetLayout.root)
-        bottomSheetBehavior.state = STATE_COLLAPSED
+        bottomSheetBehavior = from(binding.bottomSheetLayout.root)
+        bottomSheetBehavior.state = STATE_HIDDEN
 
         val fm = supportFragmentManager
         val mapFragment = fm.findFragmentById(R.id.mapFragment) as MapFragment? ?: MapFragment.newInstance()
@@ -100,8 +99,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 map = naverMap
                 captionText = it.title
                 captionRequestedWidth = 200
-                setOnClickListener {
+                setOnClickListener { _ ->
                     bottomSheetBehavior.state = STATE_EXPANDED
+                    binding.bottomSheetLayout.apply {
+                        nameTextView.text = it.title
+                        categoryTextView.text = it.category
+                        roadAddressTextView.text = it.roadAddress
+                        linkTextView.text = it.link
+                    }
                     false
                 }
             }

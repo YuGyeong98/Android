@@ -17,8 +17,6 @@ import retrofit2.Response
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var naverMap: NaverMap
-    private var isMapInit = false
     private var searchItemList = emptyList<SearchItem>()
     private var markers = emptyList<Marker>()
     private var itemList = arrayListOf<SearchItem>()
@@ -86,11 +84,28 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+        markers.forEach { it.map = null }
+        markers = searchItemList.map {
+            Marker().apply {
+                position = Tm128(it.mapx.toDouble(), it.mapy.toDouble()).toLatLng()
+                map = naverMap
+                captionText = it.title
+                captionRequestedWidth = 200
+            }
+        }
+    }
 
     override fun onMapReady(map: NaverMap) {
         naverMap = map
         isMapInit = true
-        naverMap.minZoom = 5.0
-        naverMap.maxZoom = 18.0
+        map.minZoom = 5.0
+        map.maxZoom = 18.0
+    }
+
+    companion object {
+        lateinit var naverMap: NaverMap
+        var isMapInit = false
     }
 }

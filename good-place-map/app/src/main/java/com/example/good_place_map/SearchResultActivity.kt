@@ -1,12 +1,12 @@
 package com.example.good_place_map
 
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.good_place_map.MainActivity.Companion.isMapInit
+import com.example.good_place_map.MainActivity.Companion.naverMap
 import com.example.good_place_map.databinding.ActivitySearchResultBinding
-import com.example.good_place_map.databinding.FragmentSearchResultBinding
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraUpdate
@@ -14,7 +14,7 @@ import com.naver.maps.map.CameraUpdate
 class SearchResultActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchResultBinding
     private val searchResultAdapter = SearchResultAdapter {
-//        moveCamera(it, 17.0)
+        moveCamera(it)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,7 +23,10 @@ class SearchResultActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val searchItemList = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableArrayListExtra(getString(R.string.search_item_list), SearchItem::class.java)
+            intent.getParcelableArrayListExtra(
+                getString(R.string.search_item_list),
+                SearchItem::class.java
+            )
         } else {
             intent.getParcelableArrayListExtra(getString(R.string.search_item_list))
         }
@@ -43,10 +46,11 @@ class SearchResultActivity : AppCompatActivity() {
         searchResultAdapter.submitList(searchItemList)
     }
 
-//    private fun moveCamera(position: LatLng, zoom: Double) {
-//        if (!isMapInit) return
-//
-//        val cameraUpdate = CameraUpdate.scrollAndZoomTo(position, zoom).animate(CameraAnimation.Easing)
-//        naverMap.moveCamera(cameraUpdate)
-//    }
+    private fun moveCamera(position: LatLng) {
+        if (!isMapInit) return
+
+        val cameraUpdate = CameraUpdate.scrollAndZoomTo(position, 17.0).animate(CameraAnimation.Easing)
+        naverMap.moveCamera(cameraUpdate)
+        finish()
+    }
 }

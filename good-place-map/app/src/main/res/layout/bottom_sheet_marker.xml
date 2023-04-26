@@ -5,10 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bottom_sheet_background"
-    app:behavior_expandedOffset="100dp"
+    app:behavior_expandedOffset="450dp"
     app:behavior_fitToContents="false"
     app:behavior_hideable="true"
-    app:behavior_peekHeight="90dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <View
@@ -46,18 +45,6 @@
         tools:text="한식" />
 
     <TextView
-        android:id="@+id/descriptionTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/categoryTextView"
-        tools:text="맛집설명맛집설명맛집설명맛집설명맛집설명맛집설명맛집설명맛집설명맛집설명맛집설명" />
-
-    <TextView
         android:id="@+id/roadAddressTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -67,7 +54,7 @@
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/descriptionTextView"
+        app:layout_constraintTop_toBottomOf="@id/categoryTextView"
         tools:text="서울특별시 종로구" />
 
     <TextView

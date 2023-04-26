@@ -5,7 +5,11 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.good_place_map.databinding.ActivityMainBinding
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
 import com.naver.maps.geometry.Tm128
 import com.naver.maps.map.MapFragment
 import com.naver.maps.map.NaverMap
@@ -17,6 +21,7 @@ import retrofit2.Response
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
     private var searchItemList = emptyList<SearchItem>()
     private var markers = emptyList<Marker>()
     private var itemList = arrayListOf<SearchItem>()
@@ -32,6 +37,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         supportActionBar?.apply {
             setDisplayShowTitleEnabled(false)
         }
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetLayout.root)
+        bottomSheetBehavior.state = STATE_COLLAPSED
 
         val fm = supportFragmentManager
         val mapFragment = fm.findFragmentById(R.id.mapFragment) as MapFragment? ?: MapFragment.newInstance()
@@ -93,6 +100,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 map = naverMap
                 captionText = it.title
                 captionRequestedWidth = 200
+                setOnClickListener {
+                    bottomSheetBehavior.state = STATE_EXPANDED
+                    false
+                }
             }
         }
     }

@@ -89,9 +89,17 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         })
     }
+    private fun hiddenBottomSheet() {
+        if (!isMapInit) return
+
+        naverMap.setOnMapClickListener { _, _ ->
+            bottomSheetBehavior.state = STATE_HIDDEN
+        }
+    }
 
     override fun onResume() {
         super.onResume()
+        binding.searchView.clearFocus()
         markers.forEach { it.map = null }
         markers = searchItemList.map {
             Marker().apply {
@@ -112,14 +120,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
         hiddenBottomSheet()
-    }
-
-    private fun hiddenBottomSheet() {
-        if (!isMapInit) return
-
-        naverMap.setOnMapClickListener { _, _ ->
-            bottomSheetBehavior.state = STATE_HIDDEN
-        }
     }
 
     override fun onMapReady(map: NaverMap) {

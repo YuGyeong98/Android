@@ -107,9 +107,18 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                         roadAddressTextView.text = it.roadAddress
                         linkTextView.text = it.link
                     }
-                    false
+                    true
                 }
             }
+        }
+        hiddenBottomSheet()
+    }
+
+    private fun hiddenBottomSheet() {
+        if (!isMapInit) return
+
+        naverMap.setOnMapClickListener { _, _ ->
+            bottomSheetBehavior.state = STATE_HIDDEN
         }
     }
 

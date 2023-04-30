@@ -2,6 +2,7 @@ package com.example.good_place_map
 
 import android.os.Build
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.good_place_map.MainActivity.Companion.isMapInit
@@ -52,5 +53,15 @@ class SearchResultActivity : AppCompatActivity() {
         val cameraUpdate = CameraUpdate.scrollAndZoomTo(position, 17.0).animate(CameraAnimation.Easing)
         naverMap.moveCamera(cameraUpdate)
         finish()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            android.R.id.home -> {
+                finish()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

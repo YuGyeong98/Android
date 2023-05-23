@@ -1,5 +1,10 @@
 # 음악 플레이어 앱
 
+<p align="center">
+  <img src="https://github.com/YuGyeong98/Android/assets/58517873/d8ed1612-5629-4b87-bf49-3b94855618c9" width="200px">
+  <img src="https://github.com/YuGyeong98/Android/assets/58517873/afe81c20-dbc9-4f78-870b-13c922415375" width="200px">
+</p>
+
 ## 🛠 Features
 
 1. 음악 재생, 일시정지, 정지
